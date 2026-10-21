@@ -1,8 +1,9 @@
 {
   "name": "newman-oauth-refresh",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "OAuth2 token refresh for Newman collection runs: proactive for JWTs, reactive on 401 for opaque tokens, memory only",
   "license": "MIT",
+  "author": "Shivam Mahajan (https://linkedin.com/in/shivam-mahajan-a8005a205)",
   "type": "module",
   "main": "src/index.js",
   "exports": {
@@ -33,5 +34,9 @@
   },
   "devDependencies": {
     "newman": "^6.2.1"
+  },
+  "homepage": "https://github.com/gl1tchdust/newman-oauth-refresh#readme",
+  "bugs": {
+    "url": "https://github.com/gl1tchdust/newman-oauth-refresh/issues"
   }
 }
