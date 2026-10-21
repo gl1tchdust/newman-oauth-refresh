@@ -1,0 +1,21 @@
+node_modules/
+.scratch/
+
+# Secrets - never commit these. This package never writes tokens to disk;
+# these patterns are here so nothing else in your workflow does either.
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.*
+credentials.*
+*.tokens.json
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp

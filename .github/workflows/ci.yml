@@ -1,0 +1,71 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # Weekly. Newman is the dependency whose behaviour this package makes
+    # claims about, so a release that changes it should surface here rather
+    # than in somebody's pipeline.
+    - cron: "41 6 * * 3"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 20 is the floor declared in package.json engines. 22 and 24 are
+        # current. All three are tested because the package relies on global
+        # fetch and node:test, both of which moved between these lines.
+        node: ["20", "22", "24"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - name: Tests
+        run: npm test
+
+  # ---------------------------------------------------------------------------
+  # The premise check.
+  #
+  # This package exists because Newman does not refresh OAuth2 tokens. If that
+  # ever changes, the package should be retired, not quietly kept alive. This
+  # job asserts the premise still holds by running a collection with an
+  # expiring token and NO refresh module, and failing if it somehow passes.
+  # ---------------------------------------------------------------------------
+  premise:
+    name: premise still holds (newman alone still fails)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Unassisted Newman must still fail on an expired token
+        run: node test/premise.mjs
+
+  gitleaks:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Install gitleaks
+        run: |
+          curl -sSfL -o /tmp/gitleaks.tar.gz \
+            https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp gitleaks
+          sudo install /tmp/gitleaks /usr/local/bin/gitleaks
+      - run: gitleaks detect --redact --verbose

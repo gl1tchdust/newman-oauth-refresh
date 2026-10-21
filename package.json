@@ -1,0 +1,35 @@
+{
+  "name": "newman-oauth-refresh",
+  "version": "0.1.0",
+  "description": "OAuth2 token refresh for Newman collection runs: proactive for JWTs, reactive on 401 for opaque tokens, memory only",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.js\""
+  },
+  "keywords": [
+    "newman",
+    "postman",
+    "oauth2",
+    "token-refresh",
+    "jwt",
+    "api-testing"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gl1tchdust/newman-oauth-refresh.git"
+  },
+  "devDependencies": {
+    "newman": "^6.2.1"
+  }
+}
