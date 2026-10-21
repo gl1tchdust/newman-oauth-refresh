@@ -16,7 +16,8 @@
   },
   "scripts": {
     "test": "node --test",
-    "premise": "node scripts/premise.mjs"
+    "premise": "node scripts/premise.mjs",
+    "prepublishOnly": "npm test && npm run premise"
   },
   "keywords": [
     "newman",
