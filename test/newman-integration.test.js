@@ -4,7 +4,7 @@ import { createRequire } from 'node:module'
 import vm from 'node:vm'
 
 import { withOAuthRefresh, preRequestScript, retryOn401Script } from '../src/index.js'
-import { startOAuthServer, startProtectedApi } from './mock-oauth-server.js'
+import { startOAuthServer, startProtectedApi } from '../mocks/oauth-server.js'
 
 const require = createRequire(import.meta.url)
 const newman = require('newman')

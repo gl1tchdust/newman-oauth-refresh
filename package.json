@@ -15,7 +15,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node --test \"test/*.test.js\""
+    "test": "node --test",
+    "premise": "node scripts/premise.mjs"
   },
   "keywords": [
     "newman",

@@ -4,7 +4,7 @@ import fs from 'node:fs'
 
 import { TokenManager, RefreshError } from '../src/token-manager.js'
 import { isExpiring, expiryMs } from '../src/jwt.js'
-import { startOAuthServer, makeJwt } from './mock-oauth-server.js'
+import { startOAuthServer, makeJwt } from '../mocks/oauth-server.js'
 
 describe('1. proactive refresh: decode exp, refresh a fixed margin before expiry', () => {
   test('a token well inside its lifetime is reused, not refreshed', async () => {

@@ -26,7 +26,7 @@ not the other, and Postman's documentation says so plainly: scheduled runs,
 monitors, "the Postman CLI, and Newman don't support automatic token refresh"
 ([Postman docs, OAuth 2.0](https://learning.postman.com/docs/sending-requests/authorization/oauth-20/)).
 
-That claim is checked, not quoted on trust. `test/premise.mjs` runs a
+That claim is checked, not quoted on trust. `scripts/premise.mjs` runs a
 collection with Postman's own OAuth 2.0 auth block fully configured, refresh
 token included, and expires the access token after the first request:
 
@@ -221,8 +221,8 @@ Set `oauthAccessToken` in your requests as `Bearer {{oauthAccessToken}}`.
 ## Tests
 
 ```bash
-npm test             # 40 tests
-node test/premise.mjs  # is the problem still real?
+npm test          # 40 tests
+npm run premise   # is the problem still real?
 ```
 
 Every test runs against a real OAuth2 token endpoint and a real protected API

@@ -11,14 +11,14 @@
  * executable form of that sentence, so the claim in the README is checked by
  * CI rather than trusted.
  *
- *   node test/premise.mjs
+ *   node scripts/premise.mjs
  *
  * Exit 0  the premise holds: unassisted Newman failed on the expired token
  * Exit 1  Newman refreshed on its own; this package is no longer needed
  */
 
 import { createRequire } from 'node:module'
-import { startOAuthServer, startProtectedApi } from './mock-oauth-server.js'
+import { startOAuthServer, startProtectedApi } from '../mocks/oauth-server.js'
 
 const require = createRequire(import.meta.url)
 const newman = require('newman')

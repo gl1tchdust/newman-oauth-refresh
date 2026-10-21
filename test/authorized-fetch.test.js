@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 
 import { TokenManager } from '../src/token-manager.js'
 import { createAuthorizedFetch, isReplayable } from '../src/authorized-fetch.js'
-import { startOAuthServer, startProtectedApi, makeJwt } from './mock-oauth-server.js'
+import { startOAuthServer, startProtectedApi, makeJwt } from '../mocks/oauth-server.js'
 
 describe('2. reactive refresh on 401, retry the failed request once, resume', () => {
   test('an opaque token that expires mid-run is recovered without the caller noticing', async () => {
