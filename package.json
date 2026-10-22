@@ -1,6 +1,6 @@
 {
   "name": "newman-oauth-refresh",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "OAuth2 token refresh for Newman collection runs: proactive for JWTs, reactive on 401 for opaque tokens, memory only",
   "license": "MIT",
   "author": "Shivam Mahajan (https://linkedin.com/in/shivam-mahajan-a8005a205)",
