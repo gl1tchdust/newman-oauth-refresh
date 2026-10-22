@@ -1,0 +1,76 @@
+name: publish
+
+# Trusted publishing. npm authenticates this workflow over OIDC, so there is no
+# token in this repository, no secret to rotate, and no 2FA prompt to answer.
+#
+# The trusted publisher on npm is bound to this exact filename. Renaming this
+# file silently breaks releases: npm rejects the publish with ENEEDAUTH rather
+# than anything that names the real cause.
+#
+# To release:
+#   npm version patch        # bumps package.json and creates the tag
+#   git push --follow-tags   # pushes the commit and the tag, which runs this
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: publish to npm
+    runs-on: ubuntu-latest
+
+    # Cloud-hosted runners only. Trusted publishing does not support
+    # self-hosted runners.
+    permissions:
+      contents: read
+      id-token: write # the OIDC token, this is what replaces an npm token
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+          package-manager-cache: false # never cache in a release build
+
+      # Trusted publishing needs npm 11.5.1 or later. Without this the run
+      # fails at the publish step with an authentication error that says
+      # nothing about the version, which is a bad thing to debug at release
+      # time.
+      - name: Check npm is new enough for OIDC
+        run: |
+          npm --version
+          printf '11.5.1\n%s\n' "$(npm --version)" | sort -V -C || {
+            echo "::error::npm $(npm --version) is too old, trusted publishing needs >= 11.5.1"
+            exit 1
+          }
+
+      # A tag that disagrees with package.json either republishes the version
+      # already on the registry or ships one nobody asked for. Both fail
+      # confusingly later, so catch it here.
+      - name: Check the tag matches package.json
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          echo "tag=$tag package.json=$pkg"
+          [ "$tag" = "$pkg" ] || {
+            echo "::error::tag $GITHUB_REF_NAME does not match package.json version $pkg"
+            exit 1
+          }
+
+      - run: npm ci
+
+      # prepublishOnly runs the 40 tests and the premise check, so the gate
+      # that guards a local publish guards this one too. No --ignore-scripts
+      # here: skipping it would be skipping the only thing standing between a
+      # broken tree and the registry.
+      #
+      # Provenance is attached automatically for a public package published
+      # from a public repository over OIDC. The --provenance flag is not needed.
+      - run: npm publish
