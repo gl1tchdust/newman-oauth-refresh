@@ -1,6 +1,7 @@
 # newman-oauth-refresh
 
 [![ci](https://github.com/gl1tchdust/newman-oauth-refresh/actions/workflows/ci.yml/badge.svg)](https://github.com/gl1tchdust/newman-oauth-refresh/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/newman-oauth-refresh)](https://www.npmjs.com/package/newman-oauth-refresh)
 
 OAuth2 token refresh for [Newman](https://github.com/postmanlabs/newman) collection
 runs. Proactive for JWTs, reactive on 401 for opaque tokens, and never writes a
